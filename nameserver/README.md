@@ -78,3 +78,23 @@ Note that:
 ## Test Nameserver
 
 - `nslookup attack.me 10.13.37.5`
+
+## Artifical Latency
+
+```
+sudo apt install iproute2
+```
+
+To add latency:
+
+```
+sudo tc qdisc add dev enp0s5 root netem delay 100ms
+```
+
+- Swap `enp0s5` with the interface pointing towards the resursive resolver.
+
+To remove the latency:
+
+```
+sudo tc qdisc del dev enp0s5 root
+```
