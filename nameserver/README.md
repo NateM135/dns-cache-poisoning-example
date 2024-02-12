@@ -69,3 +69,12 @@ Note that:
 
 - Check zone configuration with `sudo named-checkconf`.
 - Check record syntax with `sudo named-checkzone attack.me /var/lib/bind/db/attack.me`.
+
+### Start/Enable Service
+
+- `sudo systemctl restart bind9`
+- `sudo systemctl enable bind9`
+
+## Test Nameserver
+
+- `nslookup attack.me 10.13.37.5`
