@@ -1,3 +1,3 @@
-# SAD DNS
+# DNS Cache Poisoning Attack
 
-This repo will contain materials to recreate the SAD DNS attack. This attack targets the communication between a recursive DNS resolver and the authoritative nameserver for a domain.
+This repo contains materials needed to pull of a DNS Cache Poisoning Attack focused on poisoining a recursive resolver.
